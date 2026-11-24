@@ -26,7 +26,7 @@ app.post('/api/orders', (req, res) => {
   const dish = menu.find((item) => item.id === dishId);
 
   if (!dish){
-    return res.status(400).json({ error: 'Dish not found on menu' });
+    return res.status(404).json({ error: 'Dish not found on menu' });
   }
 
   const qty = Number(quantity);
