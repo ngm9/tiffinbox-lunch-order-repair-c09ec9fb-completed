@@ -10,7 +10,7 @@ let nextOrderId = 1;
 
 app.get('/api/menu', (req, res) => {
   const veg = req.query.veg;
-  if (veg === true) {
+  if (veg === 'true' || veg === true){
     return res.json(menu.filter((dish) => dish.isVeg));
   }
   return res.json(menu);
