@@ -6,7 +6,7 @@ export default function MenuList({ selectedDishId, onSelectDish }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
+
     async function loadMenu() {
       setLoading(true);
       setError('');
@@ -24,8 +24,26 @@ export default function MenuList({ selectedDishId, onSelectDish }) {
         setLoading(false);
       }
     }
-    loadMenu();
-  }, []);
+    async function loadMenu(onlyVeg = vegOnly) {
+      setLoading(true);
+      setError('');
+      try {
+        const url = onlyVeg ? '/pi/menu?veg=true' : '/api/menu';
+        const res = await fetch(url);
+        if(!res.ok) {
+          throw new Error('Failedto laod menu');
+        }
+        const data = await res.json();
+        setDishes(data);
+       } catch (err){
+        setError('Could not load the menu. Please try again.');
+       } finally {
+        setLoading(false);
+       }
+        }
+        useEffect(() =>{
+          loadMenu(vegOnly);
+     }, [vegOnly]);
 
   if (loading) {
     return <p>Loading menu...</p>;

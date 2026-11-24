@@ -25,11 +25,20 @@ app.post('/api/orders', (req, res) => {
 
   const dish = menu.find((item) => item.id === dishId);
 
+  if (!dish){
+    return res.status(400).json({ error: 'Dish not found on menu' });
+  }
+
+  const qty = Number(quantity);
+  if (!Number.isInteger(qty) || qty <= 0 || qty > 20){
+    return res.status(400).json({ error: 'Invalid quantity' });
+  }
+
   const order = {
     id: nextOrderId++,
     dishId,
-    quantity,
-    total: dish.price * quantity
+    quantity: qty,
+    total: dish.price * qty,
   };
   orders.push(order);
   return res.status(201).json(order);
